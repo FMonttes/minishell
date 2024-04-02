@@ -1,26 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fmontes <fmontes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/04/02 14:01:36 by fmontes           #+#    #+#             */
-/*   Updated: 2024/04/02 17:49:43 by fmontes          ###   ########.fr       */
+/*   Created: 2024/04/02 13:56:03 by fmontes           #+#    #+#             */
+/*   Updated: 2024/04/02 16:59:23 by fmontes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#ifndef MINISHELL_H
+# define MINISHELL_H
 
-int main(int ac, char **av, char **env)
-{
-    char    *input;
+# include <stdio.h>
+# include "../libft42/libft.h"
+# include <stdlib.h>
+# include <readline/readline.h>
+# include <readline/history.h>
 
-    while (1)
-    {
-        input = readline("minishell: ");
-        print_env(input, env);
-        //echo(input, av);
-        free(input);
-    }
-}
+
+//builtins
+void    echo(char *input);
+void    print_env(char *input, char **env);
+int     count_quotes(char *input);
+
+#endif
