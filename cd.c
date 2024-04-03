@@ -1,30 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fmontes <fmontes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/04/02 14:01:36 by fmontes           #+#    #+#             */
-/*   Updated: 2024/04/03 16:31:32 by fmontes          ###   ########.fr       */
+/*   Created: 2024/04/03 13:07:19 by fmontes           #+#    #+#             */
+/*   Updated: 2024/04/03 14:08:40 by fmontes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int main(int ac, char **av, char **env)
+void    cd(char *input)
 {
-    char    *input;
+    char    *cmd;
 
-   while (1)
+    cmd = strq(input, "cd");
+    if (count_quotes(input) % 2 == 0)
     {
-        input = readline("minishell: ");
-        //print_env(input, env);
-        //pwd(input);
-        //echo(input);
-        //cd(input);
-        if (ft_exit(input) == 0); //vai dar leak
-            break;
-        free(input);
+        if (chdir(cmd + 3) == 0)
+            return ;
+        else if (chdir(getenv("HOME")) == 0)
+            return ;
+        else
+            printf("diretorio inexistente\n");
     }
 }

@@ -6,25 +6,11 @@
 /*   By: fmontes <fmontes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/02 13:40:28 by fmontes           #+#    #+#             */
-/*   Updated: 2024/04/02 16:30:58 by fmontes          ###   ########.fr       */
+/*   Updated: 2024/04/03 13:06:57 by fmontes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-void    put_strq(char *input)
-{
-    int     i;
-    
-    i = 0;
-    while (input[i])
-    {
-        if (input[i] == 39 || input[i] == 34)
-            i++;
-        else
-            printf("%c", input[i++]);
-    }
-}
 
 int     count_quotes(char *input)
 {
@@ -45,18 +31,19 @@ int     count_quotes(char *input)
 void   echo(char *input)
 {
     int     i;
+    char    *cmd;
+    char    *cmd2;
 
     i = 0;
+    cmd = strq(input, "echo");
+    cmd2 = strq(input, "echo -n");
     if (count_quotes(input) % 2 == 0)
     {
       
-          if (ft_strncmp(input, "echo -n", 7) == 0)
-                put_strq(input + 8);
-            else if (input)
-            {
-                put_strq(input + 5);
-                printf("\n");
-            }
+        if (ft_strncmp(cmd2, "echo -n", ft_strlen("echo -n")) == 0)
+            printf("%s", cmd2 + 8);
+        else if (ft_strncmp(cmd, "echo", ft_strlen("echo")) == 0)
+            printf("%s\n", cmd + 5);
     }
     else
         printf("invalid syntax\n");
