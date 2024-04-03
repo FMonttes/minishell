@@ -6,7 +6,7 @@
 /*   By: fmontes <fmontes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/02 13:56:03 by fmontes           #+#    #+#             */
-/*   Updated: 2024/04/02 16:59:23 by fmontes          ###   ########.fr       */
+/*   Updated: 2024/04/03 16:30:15 by fmontes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,5 +24,9 @@
 void    echo(char *input);
 void    print_env(char *input, char **env);
 int     count_quotes(char *input);
+char    *strq(char *input, char *comand);
+void    pwd(char *input);
+void    cd(char *input);
+int   ft_exit(char *input);
 
 #endif
