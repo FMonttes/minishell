@@ -6,7 +6,7 @@
 /*   By: fmontes <fmontes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/02 13:40:28 by fmontes           #+#    #+#             */
-/*   Updated: 2024/04/03 13:06:57 by fmontes          ###   ########.fr       */
+/*   Updated: 2024/04/11 14:46:43 by fmontes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,10 +36,11 @@ void   echo(char *input)
 
     i = 0;
     cmd = strq(input, "echo");
+    cmd = remove_extra_spaces(cmd);
     cmd2 = strq(input, "echo -n");
+    cmd2 = remove_extra_spaces(cmd);
     if (count_quotes(input) % 2 == 0)
     {
-      
         if (ft_strncmp(cmd2, "echo -n", ft_strlen("echo -n")) == 0)
             printf("%s", cmd2 + 8);
         else if (ft_strncmp(cmd, "echo", ft_strlen("echo")) == 0)
