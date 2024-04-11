@@ -1,30 +1,39 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   cd.c                                               :+:      :+:    :+:   */
+/*   unset.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fmontes <fmontes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/04/03 13:07:19 by fmontes           #+#    #+#             */
-/*   Updated: 2024/04/11 14:47:42 by fmontes          ###   ########.fr       */
+/*   Created: 2024/04/09 16:35:30 by fmontes           #+#    #+#             */
+/*   Updated: 2024/04/11 15:17:20 by fmontes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void    cd(char *input)
+void    unset(char *input, char **env)
 {
+    int     i;
+    int     j;
+    char    *str;
     char    *cmd;
 
-    cmd = strq(input, "cd");
+    i = 0;
+    cmd = strq(input, "unset");
     cmd = remove_extra_spaces(cmd);
     if (count_quotes(input) % 2 == 0)
     {
-        if (chdir(cmd + 3) == 0)
-            return ;
-        else if (chdir(getenv("HOME")) == 0)
-            return ;
-        else
-            printf("diretorio inexistente\n");
+        while (env[i])
+        {
+            if (strncmp(env[i], cmd + 6, ft_strlen(cmd + 6)) == 0)
+            {
+                free(env[i]);
+                j = i;
+            }
+            while (env[j])
+                env[j++] = env[j + 1];
+            i++;
+        }
     }
 }

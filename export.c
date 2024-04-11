@@ -1,31 +1,35 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fmontes <fmontes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/04/02 14:01:36 by fmontes           #+#    #+#             */
-/*   Updated: 2024/04/11 15:27:47 by fmontes          ###   ########.fr       */
+/*   Created: 2024/04/09 10:26:28 by fmontes           #+#    #+#             */
+/*   Updated: 2024/04/11 14:53:52 by fmontes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int main(int ac, char **av, char **env)
-{
-    char    *input;
-    int i;
+//preciso verificar os inputs com ' ou "
 
-   while (1)
+void  creat_env(char *input, char **env) 
+{
+    int i = 0;
+    char    *cmd;
+
+    cmd = strq(input, "export");
+    cmd = remove_extra_spaces(cmd);
+    if (count_quotes(input) % 2 == 0)
     {
-        input = readline("minishell: ");
-        check_builtin(input, env);
-        if (hidenp("exit", input) == 1)
-        {
-            if (ft_exit(input) == 0) //vai dar leak
-              break;
-        }
-        free(input);
+        if (env == NULL)
+            exit(1);
+        while (env[i] != NULL)
+            i++;
+        env[i] = ft_strdup(cmd + 7);
+        if (env[i] == NULL)
+            exit(1);
     }
+    env[i + 1] = NULL;
 }
