@@ -6,7 +6,7 @@
 /*   By: fmontes <fmontes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 12:58:27 by fmontes           #+#    #+#             */
-/*   Updated: 2024/04/19 13:35:05 by fmontes          ###   ########.fr       */
+/*   Updated: 2024/04/24 13:09:27 by fmontes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,5 +30,5 @@ void    bash_execs(char *input, char **env)
 				exit(1);
 			}
 		}
-        wait(NULL);
+        waitpid(pid, NULL, 0);
 }
