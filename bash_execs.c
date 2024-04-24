@@ -1,39 +1,34 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   bash_execs.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fmontes <fmontes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/04/02 14:01:36 by fmontes           #+#    #+#             */
-/*   Updated: 2024/04/24 11:20:37 by fmontes          ###   ########.fr       */
+/*   Created: 2024/04/19 12:58:27 by fmontes           #+#    #+#             */
+/*   Updated: 2024/04/19 13:35:05 by fmontes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	main(int ac, char **av, char **env)
+void    bash_execs(char *input, char **env)
 {
-	char *input;
-	int fd[2];
-	while (1)
-	{
-		input = readline("\x1b[1;36mminishell\u2192\x1b[0m ");
-		add_history(input);
-		if (check_builtin(input, env))
-			continue;
-		int pid = fork();
+    int pid = fork();
+	char *cmd = ft_strdup("/bin/");
+	cmd = ft_strjoin(cmd, first_word(input));
+	char **args;
+	args = ft_split(input, ' ');
+		if (pid < 0)
+			perror("erorr");
 		if (pid == 0)
 		{
-			pipe_exec(input, fd);
+			redirect(args);
+			if ((execve(cmd, args, env)) == -1)
+			{
+				printf("Error\n");
+				exit(1);
+			}
 		}
-		bash_execs(input, env);
-		if (hidenp("exit", input) == 1)
-		{
-			if (ft_exit(input) == 0) // vai dar leak
-				break ;
-		}
-
-		free(input);
-	}
+        wait(NULL);
 }
