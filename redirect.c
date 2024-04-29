@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redirect.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: felperei <felperei@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fmontes <fmontes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/15 09:02:26 by felperei          #+#    #+#             */
-/*   Updated: 2024/04/18 15:21:28 by felperei         ###   ########.fr       */
+/*   Updated: 2024/04/29 14:21:09 by fmontes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@ void	execute_command(char **args)
 	{
 		printf("Error execve\n");
 		exit(1);
+
 	}
 }
 void	redirect(char **av)

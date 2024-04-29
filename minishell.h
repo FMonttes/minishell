@@ -6,7 +6,7 @@
 /*   By: fmontes <fmontes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/02 13:56:03 by fmontes           #+#    #+#             */
-/*   Updated: 2024/04/24 13:07:01 by fmontes          ###   ########.fr       */
+/*   Updated: 2024/04/29 15:40:51 by fmontes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,18 +14,18 @@
 # define MINISHELL_H
 
 # include <stdio.h>
-# include "../libft42/libft.h"
+# include "libft42/libft.h"
 # include <stdlib.h>
 # include <readline/readline.h>
 # include <readline/history.h>
-#include <stdlib.h>
-#include <sys/stat.h>
-#include <sys/types.h>
-#include <sys/wait.h>
-#include <unistd.h>
-#include <signal.h>
-#include <unistd.h>
-#include <fcntl.h>
+# include <stdlib.h>
+# include <sys/stat.h>
+# include <sys/types.h>
+# include <sys/wait.h>
+# include <unistd.h>
+# include <signal.h>
+# include <unistd.h>
+# include <fcntl.h>
 
 //builtins
 void    bash_execs(char *input, char **env);
@@ -49,4 +49,7 @@ char **get_params(char *input, char **params, char **words, char *command);
 int	pipe_operator(int fd[], char **args);
 void    pipe_exec(char *input, int fd[]);
 char *remove_spaces(char *input);
+void    ft_pipe(char *input, char **env, int *fd);
+void	ft_heredoc(char *input);
+
 #endif
