@@ -6,11 +6,11 @@
 /*   By: fmontes <fmontes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 12:47:20 by fmontes           #+#    #+#             */
-/*   Updated: 2024/04/24 13:07:11 by fmontes          ###   ########.fr       */
+/*   Updated: 2024/04/29 09:06:51 by fmontes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+/*#include "minishell.h"
 
 char *remove_spaces(char *input)
 {
@@ -40,4 +40,4 @@ char *remove_spaces(char *input)
     }
     ret[j] = '\0';
     return ret;
-}
+}*/
