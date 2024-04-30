@@ -6,16 +6,16 @@
 /*   By: fmontes <fmontes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/02 13:40:28 by fmontes           #+#    #+#             */
-/*   Updated: 2024/04/11 14:46:43 by fmontes          ###   ########.fr       */
+/*   Updated: 2024/04/30 15:22:59 by fmontes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int     count_quotes(char *input)
+int count_quotes(char *input)
 {
-    int     i;
-    int     quotes;
+    int i;
+    int quotes;
 
     i = 0;
     quotes = 0;
@@ -28,17 +28,17 @@ int     count_quotes(char *input)
     return quotes;
 }
 
-void   echo(char *input)
+void echo(char *input)
 {
-    int     i;
-    char    *cmd;
-    char    *cmd2;
+    int i;
+    char *cmd;
+    char *cmd2;
 
     i = 0;
     cmd = strq(input, "echo");
     cmd = remove_extra_spaces(cmd);
     cmd2 = strq(input, "echo -n");
-    cmd2 = remove_extra_spaces(cmd);
+    cmd2 = remove_extra_spaces(cmd2);
     if (count_quotes(input) % 2 == 0)
     {
         if (ft_strncmp(cmd2, "echo -n", ft_strlen("echo -n")) == 0)

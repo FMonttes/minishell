@@ -6,7 +6,7 @@
 /*   By: fmontes <fmontes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/29 09:25:51 by fmontes           #+#    #+#             */
-/*   Updated: 2024/04/29 15:38:40 by fmontes          ###   ########.fr       */
+/*   Updated: 2024/04/30 15:22:58 by fmontes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,17 +20,17 @@ static void save_output(int current_fd, char **commands, int *fd, char **env)
     close(fd[0]);
     if (check_builtin(*commands, env))
         exit(1);
-    else if (execve(ft_strjoin("/bin/", first_word(*commands)),
-            ft_split(*commands, ' '), NULL) == -1)
-    {
-        printf("minishell: command not found: %s\n", first_word(*commands));
+    else if (bash_execs(*commands, env) == 0)
         exit(EXIT_FAILURE);
-    }
+    else
+        printf("minishell: command not found: %s\n", first_word(*commands));
+    /*else if (execve(ft_strjoin("/bin/", first_word(*commands)),
+            ft_split(*commands, ' '), NULL) == -1)*/
 }
 
-static void    exec_outputs(char **env, char **commands, int *fd, __pid_t pid)
+static void exec_outputs(char **env, char **commands, int *fd, __pid_t pid)
 {
-    int        current_fd;
+    int current_fd;
 
     current_fd = 0;
     while (*commands != NULL)
@@ -46,10 +46,10 @@ static void    exec_outputs(char **env, char **commands, int *fd, __pid_t pid)
     }
 }
 
-void    ft_pipe(char *input, char **env, int *fd)
+void ft_pipe(char *input, char **env, int *fd)
 {
-    char    **commands;
-    __pid_t    pid;
+    char **commands;
+    __pid_t pid;
 
     commands = ft_split(input, '|');
     exec_outputs(env, commands, fd, pid);

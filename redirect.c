@@ -6,13 +6,13 @@
 /*   By: fmontes <fmontes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/15 09:02:26 by felperei          #+#    #+#             */
-/*   Updated: 2024/04/29 14:21:09 by fmontes          ###   ########.fr       */
+/*   Updated: 2024/04/30 10:55:54 by fmontes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	execute_command(char **args)
+/*void	execute_command(char **args)
 {
 
 	if ((execve(args[0], args, NULL)) == -2)
@@ -21,8 +21,9 @@ void	execute_command(char **args)
 		exit(1);
 
 	}
-}
-void	redirect(char **av)
+}*/
+
+void	redirect(char **av, char **env)
 {
 	int input_fd;
 	int output_fd;
@@ -56,6 +57,7 @@ void	redirect(char **av)
 		}
 		i++;
 	}
+	i = -1;
 	if (input_fd != -1)
 	{
 		dup2(input_fd, STDIN_FILENO);
@@ -67,8 +69,8 @@ void	redirect(char **av)
 		close(output_fd);
 	}
 
-	if (av[0] != NULL)
+	/*if (av[0] != NULL)
 	{
 		execute_command(av);
-	}
+	}*/
 }
