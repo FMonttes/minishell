@@ -6,7 +6,7 @@
 /*   By: fmontes <fmontes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/02 13:40:28 by fmontes           #+#    #+#             */
-/*   Updated: 2024/05/02 16:16:36 by fmontes          ###   ########.fr       */
+/*   Updated: 2024/05/02 17:03:33 by fmontes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ void echo(char *input)
     char *cmd;
     char *cmd2;
 
-    i = 0;
+    i = 2;
     cmd = strq(input, "echo");
     cmd = remove_extra_spaces(cmd);
     cmd2 = strq(input, "echo -n");
@@ -44,7 +44,8 @@ void echo(char *input)
     {
         if (ft_strncmp("echo", arg[0], ft_strlen(arg[0])) == 0 &&
             hidenp("-n", arg[1]) == 1)
-            printf("%s", arg[2]);
+            while (arg[i])
+                printf("%s ", arg[i++]);
         else if (ft_strncmp(arg[0], "echo", ft_strlen(arg[0])) == 0)
             printf("%s\n", cmd + 5);
     }
