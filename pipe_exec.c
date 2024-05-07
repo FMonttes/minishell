@@ -6,13 +6,13 @@
 /*   By: fmontes <fmontes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/29 09:25:51 by fmontes           #+#    #+#             */
-/*   Updated: 2024/04/30 15:22:58 by fmontes          ###   ########.fr       */
+/*   Updated: 2024/05/07 14:46:40 by fmontes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static void save_output(int current_fd, char **commands, int *fd, char **env)
+/*static void save_output(int current_fd, char **commands, int *fd, char **env)
 {
     dup2(current_fd, STDIN_FILENO);
     if (*(commands + 1) != NULL)
@@ -24,8 +24,9 @@ static void save_output(int current_fd, char **commands, int *fd, char **env)
         exit(EXIT_FAILURE);
     else
         printf("minishell: command not found: %s\n", first_word(*commands));
-    /*else if (execve(ft_strjoin("/bin/", first_word(*commands)),
-            ft_split(*commands, ' '), NULL) == -1)*/
+    if (execve(ft_strjoin("/bin/", first_word(*commands)),
+               ft_split(*commands, ' '), NULL) == -1)
+        exit(1);
 }
 
 static void exec_outputs(char **env, char **commands, int *fd, __pid_t pid)
@@ -54,3 +55,4 @@ void ft_pipe(char *input, char **env, int *fd)
     commands = ft_split(input, '|');
     exec_outputs(env, commands, fd, pid);
 }
+*/

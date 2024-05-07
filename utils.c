@@ -6,7 +6,7 @@
 /*   By: fmontes <fmontes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/11 15:25:32 by fmontes           #+#    #+#             */
-/*   Updated: 2024/05/02 16:28:03 by fmontes          ###   ########.fr       */
+/*   Updated: 2024/05/07 14:54:21 by fmontes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,33 +29,27 @@ int hidenp(char *cmd, char *input)
     return 0;
 }
 
-int check_builtin(char *input, char **env)
+int check_builtin(char *input, t_env *env)
 {
   if (hidenp("export", input) == 1)
   {
-    creat_env(input, env);
+    export_command(input, env);
     return 1;
   }
   else if (hidenp("unset", input) == 1)
   {
-    unset(input, env);
+    unset_command(input, env);
     return 1;
   }
   else if (hidenp("env", input) == 1)
   {
-    print_env(input, env);
+    env_command(input, env);
     return 1;
   }
   else if (hidenp("pwd", input) == 1)
-  {
-    pwd(input);
     return 1;
-  }
   else if (hidenp("echo", input) == 1)
-  {
-    echo(input);
     return 1;
-  }
   else if (hidenp("cd", input) == 1)
   {
     cd(input);

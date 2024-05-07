@@ -6,7 +6,7 @@
 /*   By: fmontes <fmontes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 12:58:27 by fmontes           #+#    #+#             */
-/*   Updated: 2024/05/02 15:02:29 by fmontes          ###   ########.fr       */
+/*   Updated: 2024/05/07 10:11:36 by fmontes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,9 +23,7 @@ int bash_execs(char *input, char **env)
 		perror("erorr");
 	if (pid == 0)
 	{
-		redirect(args, env);
-		if (check_builtin(input, env))
-			exit(1);
+		redirect(args);
 		if ((execve(cmd, args, env)) == -1)
 		{
 			printf("Error\n");

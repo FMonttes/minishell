@@ -6,7 +6,7 @@
 /*   By: fmontes <fmontes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/02 16:33:30 by fmontes           #+#    #+#             */
-/*   Updated: 2024/05/02 14:25:12 by fmontes          ###   ########.fr       */
+/*   Updated: 2024/05/07 14:40:07 by fmontes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,25 +34,67 @@ char *strq(char *input, char *comand)
     return ("syntax error");
 }
 
-void print_env(char *input, char **env)
+void print_env(char *input, t_env *env)
 {
     int i;
     int x;
     char *cmd;
-
+    t_env *current = env;
     x = 0;
     cmd = strq(input, "env");
     if (count_quotes(input) % 2 == 0)
     {
         if (strncmp(cmd, "env", ft_strlen(cmd)) == 0)
         {
-            while (env[x])
+            while (current)
             {
-                printf("%s\n", env[x]);
-                x++;
+                printf("%s\n", current->env_var_s);
+                current = current->next;
             }
         }
     }
     else
         printf("invalid syntax\n");
+}
+
+void redirect_env(char *input, t_env *env)
+{
+    int i;
+    int fd;
+    char *output_fd;
+    char **args;
+
+    args = ft_split(input, ' ');
+    if (ft_strncmp(args[0], "env", ft_strlen(args[0])) == 0)
+    {
+        i = 0;
+        while (args[i])
+        {
+            if (ft_strncmp(args[i], ">", ft_strlen(args[i])) == 0)
+            {
+                fd = open(args[i + 1], O_WRONLY, O_CREAT, O_APPEND, 0666);
+                args[i] = NULL;
+            }
+            i++;
+        }
+        t_env *current = env;
+        while (current)
+        {
+            write(fd, ft_strjoin(current->env_var_s, "\n"),
+                  ft_strlen(ft_strjoin(current->env_var_s, "\n")));
+            current = current->next;
+        }
+        close(fd);
+    }
+}
+
+void env_command(char *input, t_env *env)
+{
+    char **args;
+
+    args = ft_split(input, ' ');
+    if (ft_strncmp(args[0], "env", ft_strlen(args[0])) == 0)
+    {
+        print_env(input, env);
+    }
 }

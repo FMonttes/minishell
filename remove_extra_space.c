@@ -1,18 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   remove_space.c                                     :+:      :+:    :+:   */
+/*   remove_extra_space.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fmontes <fmontes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/11 11:24:09 by fmontes           #+#    #+#             */
-/*   Updated: 2024/04/11 14:13:31 by fmontes          ###   ########.fr       */
+/*   Updated: 2024/05/07 10:42:41 by fmontes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-char *remove_extra_spaces(char *input) 
+char *remove_e_spaces(char *input)
 {
     int i = 0;
     int flg = 0;
@@ -22,13 +22,13 @@ char *remove_extra_spaces(char *input)
 
     while (input[i] == ' ' || input[i] == '\t')
         i += 1;
-    while (input[i]) 
+    while (input[i])
     {
-        if (input[i] == ' ' || input[i] == '\t') 
+        if (input[i] == ' ' || input[i] == '\t')
             flg = 1;
-        if (!(input[i] == ' ' || input[i] == '\t')) 
+        if (!(input[i] == ' ' || input[i] == '\t'))
         {
-            if (flg) 
+            if (flg)
                 ret[x++] = ' ';
             flg = 0;
             ret[x++] = input[i];

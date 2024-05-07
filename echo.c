@@ -6,7 +6,7 @@
 /*   By: fmontes <fmontes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/02 13:40:28 by fmontes           #+#    #+#             */
-/*   Updated: 2024/05/02 17:03:33 by fmontes          ###   ########.fr       */
+/*   Updated: 2024/05/07 13:43:11 by fmontes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ int count_quotes(char *input)
     return quotes;
 }
 
-void echo(char *input)
+/*void echo(char *input)
 {
     int i;
     char *cmd;
@@ -43,12 +43,92 @@ void echo(char *input)
     if (count_quotes(input) % 2 == 0)
     {
         if (ft_strncmp("echo", arg[0], ft_strlen(arg[0])) == 0 &&
-            hidenp("-n", arg[1]) == 1)
+            ft_strncmp("-n", arg[1], ft_strlen("-n")) == 0)
+        {
             while (arg[i])
-                printf("%s ", arg[i++]);
+            {
+                if (arg[i + 1] == NULL)
+                    printf("%s", arg[i++]);
+                else
+                    printf("%s ", arg[i++]);
+            }
+        }
         else if (ft_strncmp(arg[0], "echo", ft_strlen(arg[0])) == 0)
+        {
             printf("%s\n", cmd + 5);
+        }
     }
     else
         printf("invalid syntax\n");
+}*/
+
+static void maintain_double_quotes_spaces(char **str, int *i, int *j)
+{
+    if ((*str)[*i] && (*str)[*i] == DOUBLE_QUOTES)
+    {
+        (*i)++;
+        while ((*str)[*i] && (*str)[*i] != DOUBLE_QUOTES)
+        {
+            (*str)[*j] = (*str)[*i];
+            (*j)++;
+            (*i)++;
+        }
+        (*i)++;
+        (*str)[(*j)++] = ' ';
+    }
+}
+
+char *remove_extra_spaces(char *str, int maintain_double_q_spaces)
+{
+    int i;
+    int j;
+
+    j = 0;
+    i = 0;
+    while (str[i])
+    {
+        while (str[i] == ' ' || str[i] == '\t')
+            i++;
+        if (maintain_double_q_spaces)
+            maintain_double_quotes_spaces(&str, &i, &j);
+        while (str[i] && (str[i] != ' ' && str[i] != '\t'))
+        {
+            if (str[i] == DOUBLE_QUOTES && maintain_double_q_spaces)
+                maintain_double_quotes_spaces(&str, &i, &j);
+            str[j] = str[i];
+            if (str[i + 1] == ' ' || str[i + 1] == '\t')
+                str[++j] = ' ';
+            j++;
+            i++;
+        }
+    }
+    if (str[j - 1] == ' ' || str[j - 1] == '\t')
+        j--;
+    str[j] = '\0';
+    return (str);
+}
+void echo_command(char *input)
+{
+    char **args;
+
+    args = ft_split(input, ' ');
+    int pid = fork();
+    if (pid == 0)
+    {
+        redirect(ft_split(input, ' '));
+        if (!args[1] && ft_strncmp("echo", args[0], ft_strlen(args[0])) == 0)
+        {
+            printf("\n");
+        }
+        else if (ft_strncmp("echo", args[0], ft_strlen(args[0])) == 0 && ft_strncmp("-n", args[1], ft_strlen(args[1])) == 0)
+        {
+            printf("%s", remove_extra_spaces(input, 1) + 8);
+        }
+        else if (ft_strncmp("echo", args[0], ft_strlen(args[0])) == 0)
+        {
+            printf("%s\n", remove_extra_spaces(input, 1) + 5);
+        }
+        exit(1);
+    }
+    wait(NULL);
 }

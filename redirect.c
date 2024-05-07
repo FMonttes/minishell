@@ -6,7 +6,7 @@
 /*   By: fmontes <fmontes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/15 09:02:26 by felperei          #+#    #+#             */
-/*   Updated: 2024/04/30 10:55:54 by fmontes          ###   ########.fr       */
+/*   Updated: 2024/05/07 10:11:05 by fmontes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@
 	}
 }*/
 
-void	redirect(char **av, char **env)
+void redirect(char **av)
 {
 	int input_fd;
 	int output_fd;

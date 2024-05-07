@@ -6,22 +6,22 @@
 /*   By: fmontes <fmontes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/09 16:35:30 by fmontes           #+#    #+#             */
-/*   Updated: 2024/04/11 15:17:20 by fmontes          ###   ########.fr       */
+/*   Updated: 2024/05/07 14:48:25 by fmontes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void    unset(char *input, char **env)
+/*void unset(char *input, char **env)
 {
-    int     i;
-    int     j;
-    char    *str;
-    char    *cmd;
+    int i;
+    int j;
+    char *str;
+    char *cmd;
 
     i = 0;
     cmd = strq(input, "unset");
-    cmd = remove_extra_spaces(cmd);
+    cmd = remove_extra_spaces(cmd, 0);
     if (count_quotes(input) % 2 == 0)
     {
         while (env[i])
@@ -36,4 +36,4 @@ void    unset(char *input, char **env)
             i++;
         }
     }
-}
+}*/
