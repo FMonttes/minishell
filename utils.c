@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fmontes <fmontes@student.42.fr>            +#+  +:+       +#+        */
+/*   By: felperei <felperei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/11 15:25:32 by fmontes           #+#    #+#             */
-/*   Updated: 2024/05/07 14:54:21 by fmontes          ###   ########.fr       */
+/*   Updated: 2024/05/15 14:58:15 by felperei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@ int hidenp(char *cmd, char *input)
 
 int check_builtin(char *input, t_env *env)
 {
+
   if (hidenp("export", input) == 1)
   {
     export_command(input, env);

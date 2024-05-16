@@ -6,7 +6,7 @@
 /*   By: fmontes <fmontes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/07 14:43:04 by fmontes           #+#    #+#             */
-/*   Updated: 2024/05/07 14:54:39 by fmontes          ###   ########.fr       */
+/*   Updated: 2024/05/16 13:21:25 by fmontes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,7 +87,7 @@ void unset_command(char *input, t_env *env)
     args = ft_split(input, ' ');
     if (!args[1] && ft_strncmp("unset", args[0], ft_strlen(args[0])) == 0)
     {
-        printf("%s: not enough arguments\n", args[0]);
+        ft_printf("%s: not enough arguments\n", args[0]);
     }
     else if (ft_strncmp("unset", args[0], ft_strlen(args[0])) == 0)
     {

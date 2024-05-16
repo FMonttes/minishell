@@ -6,7 +6,7 @@
 /*   By: fmontes <fmontes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/02 16:33:30 by fmontes           #+#    #+#             */
-/*   Updated: 2024/05/07 14:40:07 by fmontes          ###   ########.fr       */
+/*   Updated: 2024/05/16 13:20:50 by fmontes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ char *strq(char *input, char *comand)
     cmd[x] = '\0';
     if (ft_strncmp(cmd, comand, ft_strlen("env")) == 0)
         return (cmd);
-    return ("syntax error");
+    // return ("syntax error");
 }
 
 void print_env(char *input, t_env *env)
@@ -48,13 +48,13 @@ void print_env(char *input, t_env *env)
         {
             while (current)
             {
-                printf("%s\n", current->env_var_s);
+                ft_printf("%s\n", current->env_var_s);
                 current = current->next;
             }
         }
     }
     else
-        printf("invalid syntax\n");
+        ft_printf("invalid syntax\n");
 }
 
 void redirect_env(char *input, t_env *env)
@@ -65,6 +65,7 @@ void redirect_env(char *input, t_env *env)
     char **args;
 
     args = ft_split(input, ' ');
+
     if (ft_strncmp(args[0], "env", ft_strlen(args[0])) == 0)
     {
         i = 0;
@@ -72,8 +73,8 @@ void redirect_env(char *input, t_env *env)
         {
             if (ft_strncmp(args[i], ">", ft_strlen(args[i])) == 0)
             {
-                fd = open(args[i + 1], O_WRONLY, O_CREAT, O_APPEND, 0666);
                 args[i] = NULL;
+                fd = open(args[i + 1], O_WRONLY, O_CREAT, O_APPEND, 0666);
             }
             i++;
         }

@@ -6,7 +6,7 @@
 /*   By: fmontes <fmontes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/02 13:40:28 by fmontes           #+#    #+#             */
-/*   Updated: 2024/05/07 13:43:11 by fmontes          ###   ########.fr       */
+/*   Updated: 2024/05/16 15:25:15 by fmontes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ int count_quotes(char *input)
             while (arg[i])
             {
                 if (arg[i + 1] == NULL)
-                    printf("%s", arg[i++]);
+                    ft_printf("%s", arg[i++]);
                 else
                     printf("%s ", arg[i++]);
             }
@@ -107,26 +107,27 @@ char *remove_extra_spaces(char *str, int maintain_double_q_spaces)
     str[j] = '\0';
     return (str);
 }
+
 void echo_command(char *input)
 {
     char **args;
-
     args = ft_split(input, ' ');
     int pid = fork();
     if (pid == 0)
     {
         redirect(ft_split(input, ' '));
+        heredoc(ft_split(input, ' '));
         if (!args[1] && ft_strncmp("echo", args[0], ft_strlen(args[0])) == 0)
         {
-            printf("\n");
+            ft_printf("\n");
         }
         else if (ft_strncmp("echo", args[0], ft_strlen(args[0])) == 0 && ft_strncmp("-n", args[1], ft_strlen(args[1])) == 0)
         {
-            printf("%s", remove_extra_spaces(input, 1) + 8);
+            ft_printf("%s", remove_extra_spaces(input, 1) + 8);
         }
         else if (ft_strncmp("echo", args[0], ft_strlen(args[0])) == 0)
         {
-            printf("%s\n", remove_extra_spaces(input, 1) + 5);
+            ft_printf("%s\n", remove_extra_spaces(input, 1) + 5);
         }
         exit(1);
     }

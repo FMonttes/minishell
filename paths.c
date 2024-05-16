@@ -6,7 +6,7 @@
 /*   By: fmontes <fmontes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/15 09:47:29 by felperei          #+#    #+#             */
-/*   Updated: 2024/05/07 10:37:21 by fmontes          ###   ########.fr       */
+/*   Updated: 2024/05/16 13:21:36 by fmontes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ char **get_params(char *input, char **params, char **words, char *command)
     else if (ft_strchr(params[i], '>'))
       i++;
     words[j] = params[i];
-    printf("words[%d]: %s\n", j, words[j]);
+    ft_printf("words[%d]: %s\n", j, words[j]);
     i++;
     j++;
   }
@@ -87,7 +87,7 @@ char **get_path(void)
     }
     paths[x][i] = '/';
     paths[x][i + 1] = '\0';
-    printf("%s\n", paths[x]);
+    ft_printf("%s\n", paths[x]);
 
     x++;
   }

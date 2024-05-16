@@ -6,7 +6,7 @@
 /*   By: fmontes <fmontes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/03 13:07:19 by fmontes           #+#    #+#             */
-/*   Updated: 2024/05/07 10:43:55 by fmontes          ###   ########.fr       */
+/*   Updated: 2024/05/16 13:48:44 by fmontes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,15 +16,21 @@ void cd(char *input)
 {
     char *cmd;
 
-    cmd = strq(input, "cd");
-    cmd = remove_extra_spaces(cmd, 0);
-    if (count_quotes(input) % 2 == 0)
+    cmd = ft_strnstr(input, "cd", ft_strlen(input));
+    if (cmd != NULL)
     {
-        if (chdir(cmd + 3) == 0)
+        if (ft_strncmp("cd", input, ft_strlen(input)) == 0)
+        {
+            chdir(getenv("HOME"));
             return;
-        else if (chdir(getenv("HOME")) == 0)
-            return;
-        else
-            printf("diretorio inexistente\n");
+        }
+        cmd = remove_extra_spaces(cmd + 2, 0);
+        if (count_quotes(input) % 2 == 0)
+        {
+            if (chdir(cmd) == 0)
+                return;
+            else
+                ft_printf("Diretório inexistente\n");
+        }
     }
 }

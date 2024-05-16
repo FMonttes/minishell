@@ -1,0 +1,30 @@
+static void exec_outputs(t_env *env, char **commands, int *fd, __pid_t pid)
+{
+    int *pids;
+    int i = 0;
+    int j;
+
+    while (commands[i])
+        i++;
+    j = i;
+    pids = (int *)malloc(sizeof(int) * i);
+    i = 0;
+    while (*commands != NULL)
+    {
+        pipe(fd);
+        pid = fork();
+        pids[i++] = pid;
+        if (!pid)
+            save_output( 0, commands, fd, env);
+        close(fd[1]);
+         dup2(fd[0], 0);
+        close(fd[0]);
+        commands++;
+    }
+    i = 0;
+        // while (i < j)
+        // waitpid(pids[i++], NULL, 0);
+        // waitpid(pid, NULL, 0);
+       close(fd[0]);
+       close(fd[1]);
+}
