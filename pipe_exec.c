@@ -6,7 +6,7 @@
 /*   By: fmontes <fmontes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/29 09:25:51 by fmontes           #+#    #+#             */
-/*   Updated: 2024/05/16 16:47:38 by fmontes          ###   ########.fr       */
+/*   Updated: 2024/05/20 14:59:36 by fmontes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,8 @@ static void save_output(int /* current_fd */, char **commands, int *fd, t_env *e
 {
     char **args = ft_split(*commands, ' ');
     redirect(args);
-    heredoc(args);
+    if (heredoc(*commands, env, fd))
+        exit(1);
     // if (bash_execs(*commands, env) == 0)
     //     exit(EXIT_FAILURE);
     // else
@@ -48,8 +49,8 @@ static void save_output(int /* current_fd */, char **commands, int *fd, t_env *e
     {
         // char **args = ft_split(*commands, ' ');
         // heredoc(args);
-        echo_command(*commands);
-        pwd(*commands);
+        echo_command(*commands, env, fd);
+        pwd(*commands, env, fd);
         redirect_env(*commands, env);
     }
     /* dup2(current_fd, STDIN_FILENO); */
@@ -59,14 +60,7 @@ static void save_output(int /* current_fd */, char **commands, int *fd, t_env *e
     close(fd[1]);
     char **args2 = ft_split(getenv("PATH"), ':');
     int i = 0;
-    while (args2[i])
-    {
-        char *cmd = ft_strjoin(args2[i], "/");
-        if ((execve(ft_strjoin(cmd, first_word(*commands)),
-                    args, env->environ)) == -1)
-            ;
-        i++;
-    }
+    exec(*commands, args, env);
     exit(1);
 }
 

@@ -6,7 +6,7 @@
 /*   By: fmontes <fmontes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/02 13:56:03 by fmontes           #+#    #+#             */
-/*   Updated: 2024/05/16 16:03:39 by fmontes          ###   ########.fr       */
+/*   Updated: 2024/05/20 14:42:10 by fmontes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,14 +47,20 @@ typedef struct s_env
 #include <fcntl.h>
 #include <termios.h>
 
-int bash_execs(char *input, t_env *env);
+void bash_execs(char *input, char **args, t_env *env, int *fd);
+int heredoc(char *cmd, t_env *env, int *fd);
+void init_signals(void);
+char **env_list_to_sstrs(t_env *env);
+void exec(char *input, char **args, t_env *env);
+void sigint_handler(int sig);
+void sigquit_handler(int sig);
 char *join_expand(char *input, t_env *env);
 void echo(char *input);
 void print_env(char *input, t_env *env);
 char *first_word(char *input);
 int count_quotes(char *input);
 char *strq(char *input, char *comand);
-void pwd(char *input);
+void pwd(char *input, t_env *env, int *fd);
 void cd(char *input);
 int ft_exit(char *input);
 void creat_env(char *input, t_env *env);
@@ -63,7 +69,6 @@ char *remove_e_spaces(char *input);
 int check_builtin(char *input, t_env *env);
 int hidenp(char *cmd, char *input);
 int redirect(char **av);
-int heredoc(char **args);
 char **get_path(void);
 char **get_params(char *input, char **params, char **words, char *command);
 int pipe_operator(int fd[], char **args);
@@ -73,7 +78,7 @@ void print_echo(char *input);
 void ft_pipe(char *input, t_env *env);
 void print_pwd(char *input);
 char *remove_extra_spaces(char *str, int maintain_double_q_spaces);
-void echo_command(char *input);
+void echo_command(char *input, t_env *env, int *fd);
 t_env *init_env(char **environ);
 void append_env_var(t_env *env, char *env_s);
 void redirect_env(char *input, t_env *env);

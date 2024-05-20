@@ -3,66 +3,76 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: felperei <felperei@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fmontes <fmontes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/04/29 10:42:32 by fmontes           #+#    #+#             */
-/*   Updated: 2024/05/14 11:25:32 by felperei         ###   ########.fr       */
+/*   Created: 2024/05/20 13:19:04 by fmontes           #+#    #+#             */
+/*   Updated: 2024/05/20 15:05:35 by fmontes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-/*void	execute_command(char **args)
+int heredoc(char *cmd, t_env *env, int *fd)
 {
+	int flag = 0;
+	char *joined = ft_strdup("");
 
-	if ((execve(args[0], args, NULL)) == -2)
-	{
-		printf("Error execve\n");
-		exit(1);
-
-	}
-}*/
-int	heredoc(char **args)
-{
+	int input_fd;
 	int output_fd;
-	int fd[2];
+	char **args;
 	int i;
 	char *delimitador;
 	char *input;
+
 	i = 0;
-	output_fd = -1;
-	pipe(fd);
+	args = ft_split(cmd, ' ');
+	/*while (cmd[i])
+	{
+		if (hidenp("<<", cmd) == 1)
+	}*/
 	while (args[i])
 	{
 		if (ft_strncmp(args[i], "<<", ft_strlen(args[i])) == 0)
 		{
 			args[i] = NULL;
-			 delimitador =  args[i + 1];
-				while (1)
-				{
-					input = readline(">");
-					if (ft_strncmp(input, delimitador, ft_strlen(delimitador)) == 0)
-					{
-						free(input);
-						break;
-					}
-				}
-		}
-		else if (ft_strncmp(args[i], ">>", ft_strlen(args[i])) == 0)
-		{
-			args[i] = NULL;
-			output_fd = open(args[i + 1], O_WRONLY | O_CREAT | O_APPEND, 0644);
-			if (output_fd == -1)
+			delimitador = args[i + 1];
+			while (1)
 			{
-				perror("open");
-				exit(EXIT_FAILURE);
+				input = readline(">");
+				input = ft_strtrim(join_expand(input, env), " 	");
+				if (ft_strncmp(input, delimitador, ft_strlen(delimitador)) == 0)
+				{
+					free(input);
+					break;
+				}
+				joined = ft_strjoin(joined, input);
+				joined = ft_strjoin(joined, "\n");
+				free(input);
 			}
+			flag = 1;
 		}
 		i++;
 	}
-	if (output_fd != -1)
+	if (flag)
 	{
-		dup2(output_fd, STDOUT_FILENO);
-		close(output_fd);
+		int fd[2];
+		__pid_t pid;
+
+		pipe(fd);
+		pid = fork();
+		if (pid == 0)
+		{
+			close(fd[1]);
+			dup2(fd[0], STDIN_FILENO);
+			close(fd[0]);
+
+			exec(cmd, args, env);
+		}
+		close(fd[0]);
+		write(fd[1], joined, ft_strlen(joined));
+		close(fd[1]);
+		waitpid(pid, NULL, 0);
+		return (1);
 	}
+	return (0);
 }
