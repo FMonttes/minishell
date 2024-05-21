@@ -6,7 +6,7 @@
 /*   By: fmontes <fmontes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/02 13:56:03 by fmontes           #+#    #+#             */
-/*   Updated: 2024/05/20 14:42:10 by fmontes          ###   ########.fr       */
+/*   Updated: 2024/05/21 15:37:27 by fmontes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,23 @@ typedef enum l_tkn
     REDC,
 } t_tkn;
 
+typedef struct s_word
+{
+    int fd_in;
+    int fd_out;
+    int flag;
+    char *word;
+    struct s_word *head;
+    struct s_word *next;
+
+} t_word;
+
+typedef struct l_stack
+{
+    t_word *head;
+    int size;
+} t_stack;
+
 typedef struct s_env
 {
     char *env_var_s;
@@ -38,6 +55,7 @@ typedef struct s_env
 #include <stdlib.h>
 #include <readline/readline.h>
 #include <readline/history.h>
+#include <errno.h>
 #include <stdlib.h>
 #include <sys/stat.h>
 #include <sys/types.h>
@@ -47,9 +65,13 @@ typedef struct s_env
 #include <fcntl.h>
 #include <termios.h>
 
+t_word *creat_list(char *input);
+t_word *ft_lstnew(char *input);
+void print_list(t_word *head);
 void bash_execs(char *input, char **args, t_env *env, int *fd);
 int heredoc(char *cmd, t_env *env, int *fd);
 void init_signals(void);
+int print_exit_status(char *input);
 char **env_list_to_sstrs(t_env *env);
 void exec(char *input, char **args, t_env *env);
 void sigint_handler(int sig);

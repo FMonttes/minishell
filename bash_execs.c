@@ -6,7 +6,7 @@
 /*   By: fmontes <fmontes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 12:58:27 by fmontes           #+#    #+#             */
-/*   Updated: 2024/05/20 13:59:57 by fmontes          ###   ########.fr       */
+/*   Updated: 2024/05/21 15:25:55 by fmontes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,9 +48,12 @@ char **env_list_to_sstrs(t_env *env)
 
 void exec(char *input, char **args, t_env *env)
 {
+	// extern unsigned int exit_status;
 	int i;
 	char *path;
 	char **args2;
+	int ok;
+	char *full_path;
 	char *cmd;
 
 	i = 0;
@@ -65,11 +68,23 @@ void exec(char *input, char **args, t_env *env)
 	while (args2[i])
 	{
 		cmd = ft_strjoin(args2[i], "/");
-		if ((execve(ft_strjoin(cmd, first_word(input)),
-					args, env->environ)) == -1)
-			;
+		full_path = ft_strjoin(cmd, first_word(input));
+
+		if (access(full_path, F_OK) == 0)
+		{
+			ok = access(full_path, F_OK);
+			break;
+		}
 		i++;
 	}
+	if (execve(full_path, args, env->environ) == -1)
+	{
+		printf("minishell: command not found %s\n", full_path);
+		// exit_status = 127;
+		exit(127);
+	}
+	else
+		exit(EXIT_SUCCESS);
 }
 
 void bash_execs(char *input, char **args, t_env *env, int *fd)
@@ -77,6 +92,8 @@ void bash_execs(char *input, char **args, t_env *env, int *fd)
 	char *path;
 	__pid_t pid;
 	int x = 0;
+	int status;
+	// extern unsigned int exit_status;
 
 	if (!*input)
 		return;
@@ -88,5 +105,6 @@ void bash_execs(char *input, char **args, t_env *env, int *fd)
 			exit(1);
 		exec(input, args, env);
 	}
-	waitpid(pid, NULL, 0);
+	waitpid(pid, &status, 0);
+	// exit_status = WEXITSTATUS(status);
 }

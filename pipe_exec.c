@@ -6,34 +6,11 @@
 /*   By: fmontes <fmontes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/29 09:25:51 by fmontes           #+#    #+#             */
-/*   Updated: 2024/05/20 14:59:36 by fmontes          ###   ########.fr       */
+/*   Updated: 2024/05/21 14:54:41 by fmontes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-/*int verifica_pipe(char *input) {
-    int dentro_das_aspas = 0;
-    char *ptr = input;
-    int pipe_fora_das_aspas = 0;
-
-    while (*ptr != '\0') {
-        if (*ptr == '"') {
-            dentro_das_aspas = 1 - dentro_das_aspas;
-        } else if (*ptr == '|' && dentro_das_aspas) {
-            return 1;
-        } else if (*ptr == '|' && !dentro_das_aspas) {
-            pipe_fora_das_aspas = 1;
-        }
-        ptr++;
-    }
-
-    if (pipe_fora_das_aspas) {
-        return (2);
-    }
-
-    return 0;
-}*/
 
 static void save_output(int /* current_fd */, char **commands, int *fd, t_env *env)
 {
@@ -82,6 +59,8 @@ static void exec_outputs(t_env *env, char **commands, int *fd, __pid_t pid)
         pids[i++] = pid;
         if (pid == 0)
             save_output(0, commands, fd, env);
+        // if (cmds->next && cmds->next.fd[0])
+        //     dup2(cmds->next.fd[0], 0);
         close(fd[1]);
         dup2(fd[0], 0);
         close(fd[0]);

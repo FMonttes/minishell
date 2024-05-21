@@ -6,12 +6,11 @@
 /*   By: fmontes <fmontes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/02 14:01:36 by fmontes           #+#    #+#             */
-/*   Updated: 2024/05/20 14:51:52 by fmontes          ###   ########.fr       */
+/*   Updated: 2024/05/21 15:22:28 by fmontes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-struct termios save_term;
 
 /*void sigint_handler(int sig)
 {
@@ -37,6 +36,7 @@ void init_signals(void)
 	ignal(SIGQUIT, sigquit_handler);
 }*/
 
+/*unsigned int exit_status;
 int main(void)
 {
 
@@ -50,6 +50,7 @@ int main(void)
 
 	while (1)
 	{
+		printf("%i", exit_status);
 		input = readline("\x1b[1;36mminishell\u2192\x1b[0m ");
 		input = ft_strtrim(join_expand(input, env), " 	");
 		if (!input)
@@ -80,4 +81,4 @@ int main(void)
 		bash_execs(input, ft_split(input, ' '), env, fd);
 		free(input);
 	}
-}
+}*/
