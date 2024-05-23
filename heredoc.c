@@ -6,24 +6,24 @@
 /*   By: fmontes <fmontes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/20 13:19:04 by fmontes           #+#    #+#             */
-/*   Updated: 2024/05/20 15:05:35 by fmontes          ###   ########.fr       */
+/*   Updated: 2024/05/23 12:22:43 by fmontes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int heredoc(char *cmd, t_env *env, int *fd)
+int	heredoc(char *cmd, t_env *env)
 {
-	int flag = 0;
+	(void)env;
+	// int flag = 0;
+	 int output_fd;
 	char *joined = ft_strdup("");
-
-	int input_fd;
-	int output_fd;
+	// int output_fd;
 	char **args;
 	int i;
 	char *delimitador;
 	char *input;
-
+	output_fd = -1;
 	i = 0;
 	args = ft_split(cmd, ' ');
 	/*while (cmd[i])
@@ -39,40 +39,56 @@ int heredoc(char *cmd, t_env *env, int *fd)
 			while (1)
 			{
 				input = readline(">");
-				input = ft_strtrim(join_expand(input, env), " 	");
+				// input = ft_strtrim(join_expand(input), " 	");
 				if (ft_strncmp(input, delimitador, ft_strlen(delimitador)) == 0)
 				{
 					free(input);
-					break;
+					break ;
 				}
 				joined = ft_strjoin(joined, input);
 				joined = ft_strjoin(joined, "\n");
 				free(input);
 			}
-			flag = 1;
+			// flag = 1;
+		}
+		else if (ft_strncmp(args[i], ">>", ft_strlen(args[i])) == 0)
+		{
+			args[i] = NULL;
+			output_fd = open(args[i + 1], O_WRONLY | O_CREAT | O_APPEND, 0644);
+			if (output_fd == -1)
+			{
+				perror("open");
+				exit(EXIT_FAILURE);
+			}
 		}
 		i++;
 	}
-	if (flag)
+	if (output_fd != -1)
 	{
-		int fd[2];
-		__pid_t pid;
-
-		pipe(fd);
-		pid = fork();
-		if (pid == 0)
-		{
-			close(fd[1]);
-			dup2(fd[0], STDIN_FILENO);
-			close(fd[0]);
-
-			exec(cmd, args, env);
-		}
-		close(fd[0]);
-		write(fd[1], joined, ft_strlen(joined));
-		close(fd[1]);
-		waitpid(pid, NULL, 0);
-		return (1);
+		dup2(output_fd, STDOUT_FILENO);
+		close(output_fd);
 	}
+	// if (flag)
+	// {
+	// 	int fd[2];
+	// 	__pid_t pid;
+
+	// 	pipe(fd);
+	// 	pid = fork();
+	// 	if (pid == 0)
+	// 	{
+	// 		close(fd[1]);
+	// 		dup2(fd[0], STDIN_FILENO);
+	// 		close(fd[0]);
+
+	// 		exec(cmd, args, env);
+	// 	}
+	// 	close(fd[0]);
+	// 	write(fd[1], joined, ft_strlen(joined));
+	// 	close(fd[1]);
+	// 	waitpid(pid, NULL, 0);
+	// 	return (1);
+	// }
 	return (0);
 }
+

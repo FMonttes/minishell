@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redirect.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: felperei <felperei@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fmontes <fmontes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/15 09:02:26 by felperei          #+#    #+#             */
-/*   Updated: 2024/05/15 15:06:22 by felperei         ###   ########.fr       */
+/*   Updated: 2024/05/23 12:23:04 by fmontes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@
 	}
 }*/
 
-int redirect(char **av)
+int	redirect(char **av)
 {
 	int input_fd;
 	int output_fd;
@@ -44,7 +44,6 @@ int redirect(char **av)
 				perror("open");
 				exit(EXIT_FAILURE);
 			}
-			
 		}
 		else if (ft_strncmp(av[i], ">", ft_strlen(av[i])) == 0)
 		{

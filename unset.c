@@ -6,34 +6,23 @@
 /*   By: fmontes <fmontes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/09 16:35:30 by fmontes           #+#    #+#             */
-/*   Updated: 2024/05/07 14:48:25 by fmontes          ###   ########.fr       */
+/*   Updated: 2024/05/23 12:23:12 by fmontes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-/*void unset(char *input, char **env)
+void unset_command(char *input, t_env *env)
 {
-    int i;
-    int j;
-    char *str;
-    char *cmd;
+    char **args;
 
-    i = 0;
-    cmd = strq(input, "unset");
-    cmd = remove_extra_spaces(cmd, 0);
-    if (count_quotes(input) % 2 == 0)
+    args = ft_split(input, ' ');
+    if (!args[1] && ft_strncmp("unset", args[0], ft_strlen(args[0])) == 0)
     {
-        while (env[i])
-        {
-            if (strncmp(env[i], cmd + 6, ft_strlen(cmd + 6)) == 0)
-            {
-                free(env[i]);
-                j = i;
-            }
-            while (env[j])
-                env[j++] = env[j + 1];
-            i++;
-        }
+        ft_printf("%s: not enough arguments\n", args[0]);
     }
-}*/
+    else if (ft_strncmp("unset", args[0], ft_strlen(args[0])) == 0)
+    {
+        list_remove_if(&env, args[1], ft_strncmp);
+    }
+}

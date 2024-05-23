@@ -6,19 +6,17 @@
 /*   By: fmontes <fmontes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/03 13:08:20 by fmontes           #+#    #+#             */
-/*   Updated: 2024/05/20 15:12:44 by fmontes          ###   ########.fr       */
+/*   Updated: 2024/05/23 12:22:59 by fmontes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void pwd(char *input, t_env *env, int *fd)
+void pwd(char *input, t_env *env)
 {
-    char *cmd;
     char *current_directory;
     char **args;
 
-    cmd = strq(input, "pwd");
     int pid = fork();
     args = ft_split(input, ' ');
     if (pid == 0)
@@ -26,7 +24,7 @@ void pwd(char *input, t_env *env, int *fd)
         if (ft_strncmp(args[0], "pwd", ft_strlen(args[0])) == 0 && count_quotes(input) % 2 == 0)
         {
             redirect(ft_split(input, ' '));
-            if (heredoc(input, env, fd))
+            if (heredoc(input, env))
                 exit(1);
             current_directory = getcwd(NULL, 0);
             // char *current_directory = (char *)malloc(100000 * sizeof(char));

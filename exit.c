@@ -6,7 +6,7 @@
 /*   By: fmontes <fmontes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/03 14:10:02 by fmontes           #+#    #+#             */
-/*   Updated: 2024/05/16 13:20:58 by fmontes          ###   ########.fr       */
+/*   Updated: 2024/05/23 12:22:27 by fmontes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,4 +24,5 @@ int ft_exit(char *input)
     }
     else
         ft_printf("exit: command not found\n");
+    return (1);
 }

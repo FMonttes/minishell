@@ -6,7 +6,7 @@
 /*   By: fmontes <fmontes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/02 16:33:30 by fmontes           #+#    #+#             */
-/*   Updated: 2024/05/21 11:26:05 by fmontes          ###   ########.fr       */
+/*   Updated: 2024/05/23 12:22:23 by fmontes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,16 +31,13 @@ char *strq(char *input, char *comand)
     cmd[x] = '\0';
     if (ft_strncmp(cmd, comand, ft_strlen("env")) == 0)
         return (cmd);
-    // return ("syntax error");
+     return (0);
 }
 
 void print_env(char *input, t_env *env)
 {
-    int i;
-    int x;
     char *cmd;
     t_env *current = env;
-    x = 0;
     cmd = strq(input, "env");
     if (count_quotes(input) % 2 == 0)
     {
@@ -61,7 +58,6 @@ void redirect_env(char *input, t_env *env)
 {
     int i;
     int fd;
-    char *output_fd;
     char **args;
 
     args = ft_split(input, ' ');

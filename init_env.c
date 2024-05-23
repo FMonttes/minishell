@@ -6,7 +6,7 @@
 /*   By: fmontes <fmontes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/07 14:43:04 by fmontes           #+#    #+#             */
-/*   Updated: 2024/05/16 13:21:25 by fmontes          ###   ########.fr       */
+/*   Updated: 2024/05/23 12:22:47 by fmontes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,8 +24,7 @@ t_env *init_env(char **environ)
     }
     while (*environ)
     {
-        append_env_var(env, *environ);
-        *environ++;
+        append_env_var(env, *environ++);
     }
     return (env);
 }
@@ -80,31 +79,3 @@ void list_remove_if(t_env **env, char *str,
     free(current);
 }
 
-void unset_command(char *input, t_env *env)
-{
-    char **args;
-
-    args = ft_split(input, ' ');
-    if (!args[1] && ft_strncmp("unset", args[0], ft_strlen(args[0])) == 0)
-    {
-        ft_printf("%s: not enough arguments\n", args[0]);
-    }
-    else if (ft_strncmp("unset", args[0], ft_strlen(args[0])) == 0)
-    {
-        list_remove_if(&env, args[1], ft_strncmp);
-    }
-}
-
-void export_command(char *input, t_env *env)
-{
-    char **args;
-    char *env_var_name;
-
-    args = ft_split(input, ' ');
-    if (!args[1] && ft_strncmp("export", args[0], ft_strlen(args[0])) == 0)
-        return;
-    else if (ft_strncmp("export", args[0], ft_strlen(args[0])) == 0)
-    {
-        append_env_var(env, remove_extra_spaces(input, 1) + 7);
-    }
-}

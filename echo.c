@@ -6,7 +6,7 @@
 /*   By: fmontes <fmontes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/02 13:40:28 by fmontes           #+#    #+#             */
-/*   Updated: 2024/05/20 15:14:08 by fmontes          ###   ########.fr       */
+/*   Updated: 2024/05/23 12:25:53 by fmontes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,16 +108,13 @@ char *remove_extra_spaces(char *str, int maintain_double_q_spaces)
     return (str);
 }
 
-void echo_command(char *input, t_env *env, int *fd)
+void echo_command(char *input, t_env *env)
 {
     char **args;
     args = ft_split(input, ' ');
     int pid = fork();
     if (pid == 0)
     {
-        redirect(ft_split(input, ' '));
-        if (heredoc(input, env, fd))
-            exit(1);
         if (!args[1] && ft_strncmp("echo", args[0], ft_strlen(args[0])) == 0)
         {
             ft_printf("\n");
