@@ -3,64 +3,75 @@
 /*                                                        :::      ::::::::   */
 /*   ft_itoa.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: felperei <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: fmontes <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/10/30 11:19:00 by felperei          #+#    #+#             */
-/*   Updated: 2023/10/30 12:01:31 by felperei         ###   ########.fr       */
+/*   Created: 2023/10/25 11:57:17 by fmontes           #+#    #+#             */
+/*   Updated: 2023/10/30 10:56:26 by fmontes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
 #include "libft.h"
 
-static	int	ft_count(long int n)
+static int	count(long nbr)
 {
-	int	count;
+	int		size;
+	long	num;
 
-	count = 0;
-	if (n < 0)
+	size = 0;
+	if (nbr == 0)
+		size = 1;
+	else
 	{
-		n *= -1;
-		count++;
+		if (nbr < 0)
+		{
+			size++;
+			nbr *= -1;
+		}
+		num = nbr;
+		while (num > 0)
+		{
+			size++;
+			num /= 10;
+		}
 	}
-	while (n > 0)
-	{
-		n /= 10;
-		count++;
-	}
-	return (count);
+	return (size);
 }
 
-char	*ft_transform(long int nb, char *str, int i)
+static void	conditions(long n, char *newstr, long j, int strsize)
 {
-	while (nb > 0)
+	if (n == 0)
+		newstr[0] = '0';
+	else
 	{
-		str[i--] = nb % 10 + '0';
-		nb = nb / 10;
+		j = strsize - 1;
+		if (n < 0)
+		{
+			newstr[0] = '-';
+			n *= -1;
+		}
+		while (n != 0)
+		{
+			newstr[j] = n % 10 + '0';
+			n /= 10;
+			j--;
+		}
 	}
-	return (str);
 }
 
 char	*ft_itoa(int n)
 {
-	char		*str;
-	int			i;
-	long int	nb;
+	long	a;
+	int		j;
+	int		strsize;
+	char	*newstr;
 
-	nb = n;
-	i = ft_count(nb);
-	str = malloc(i * sizeof(char) + 1);
-	if (!str)
+	a = n;
+	j = 0;
+	strsize = count(a);
+	newstr = (char *)malloc(strsize + 1);
+	if (newstr == NULL)
 		return (NULL);
-	str[i--] = 0;
-	if (nb == 0)
-	{
-		str = ft_calloc(2, sizeof(char));
-		str[0] = '0';
-	}
-	if (nb < 0)
-	{
-		str[0] = '-';
-		nb *= -1;
-	}
-	ft_transform(nb, str, i);
-	return (str);
+	conditions(a, newstr, j, strsize);
+	newstr[strsize] = '\0';
+	return (newstr);
 }

@@ -6,40 +6,35 @@
 /*   By: fmontes <fmontes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/03 13:08:20 by fmontes           #+#    #+#             */
-/*   Updated: 2024/05/23 12:22:59 by fmontes          ###   ########.fr       */
+/*   Updated: 2024/05/28 09:45:40 by fmontes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void pwd(char *input, t_env *env)
+void pwd(t_word *data, t_env *env)
 {
-    char *current_directory;
-    char **args;
+	char *current_directory;
+	t_word *current;
 
-    int pid = fork();
-    args = ft_split(input, ' ');
-    if (pid == 0)
-    {
-        if (ft_strncmp(args[0], "pwd", ft_strlen(args[0])) == 0 && count_quotes(input) % 2 == 0)
-        {
-            redirect(ft_split(input, ' '));
-            if (heredoc(input, env))
-                exit(1);
-            current_directory = getcwd(NULL, 0);
-            // char *current_directory = (char *)malloc(100000 * sizeof(char));
-
-            if (current_directory)
-            {
-                ft_printf("%s\n", current_directory);
-                free(current_directory);
-            }
-            else
-                perror("Erro ao obter o diretório de trabalho atual");
-            exit(1);
-        }
-        // else
-        //     ft_printf("syntax error\n");
-    }
-    waitpid(pid, NULL, 0);
+	current = data;
+	while (current)
+	{
+		if ((ft_strncmp(current->word, "pwd", ft_strlen(current->word)) == 0) &&
+			count_quotes(data->raw_cmd) % 2 == 0)
+		{
+			current_directory = getcwd(NULL, 0);
+			if (current_directory)
+			{
+				printf("builtin\n");
+				ft_printf("%s\n", current_directory);
+				free(current_directory);
+			}
+			else
+				perror("Erro ao obter o diretório de trabalho atual");
+		}
+		else
+			printf("error\n");
+		current = current->next;
+	}
 }

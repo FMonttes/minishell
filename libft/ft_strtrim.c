@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strtrim.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: felperei <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: fmontes <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/10/23 11:00:15 by felperei          #+#    #+#             */
-/*   Updated: 2023/10/24 10:44:10 by felperei         ###   ########.fr       */
+/*   Created: 2023/10/24 10:24:11 by fmontes           #+#    #+#             */
+/*   Updated: 2023/10/24 10:30:04 by fmontes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,28 +14,14 @@
 
 char	*ft_strtrim(char const *s1, char const *set)
 {
-	int		i;
-	int		size_s1;
-	char	*result;
+	size_t	i;
 
 	if (!s1 || !set)
-		return (NULL);
-	while (*s1 && ft_strchr(set,*s1))
+		return (0);
+	while (*s1 && ft_strchr(set, *s1))
 		s1++;
-	size_s1 = ft_strlen(s1);
-	while (*s1 && ft_strchr(set, s1[size_s1 - 1]))
-		size_s1--;
-	result = (char *)malloc(size_s1 + 1);
-	i = 0;
-	if (result)
-	{
-		while (i < size_s1 && *s1)
-		{
-			result[i] = *s1;
-			i++;
-			s1++;
-		}
-		result[i] = '\0';
-	}
-	return (result);
+	i = ft_strlen(s1);
+	while (i && ft_strchr(set, s1[i]))
+		i--;
+	return (ft_substr(s1, 0, i + 1));
 }

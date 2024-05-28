@@ -6,23 +6,23 @@
 /*   By: fmontes <fmontes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/03 14:10:02 by fmontes           #+#    #+#             */
-/*   Updated: 2024/05/23 12:22:27 by fmontes          ###   ########.fr       */
+/*   Updated: 2024/05/28 09:28:38 by fmontes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int ft_exit(char *input)
+int ft_exit(t_word *data)
 {
-    char *cmd;
+	t_word *current;
 
-    cmd = strq(input, "exit");
-    if (ft_strncmp(cmd, "exit", ft_strlen("exit")) == 0 && count_quotes(input) % 2 == 0)
-    {
-        ft_printf("exit\n");
-        return (0);
-    }
-    else
-        ft_printf("exit: command not found\n");
-    return (1);
+	current = data;
+	if (ft_strncmp(current->word, "exit", ft_strlen("exit")) == 0 && count_quotes(current->word) % 2 == 0)
+	{
+		ft_printf("exit\n");
+		return (0);
+	}
+	else
+		ft_printf("exit: command not found\n");
+	return (1);
 }

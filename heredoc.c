@@ -1,35 +1,48 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   heredoc.c                                          :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: fmontes <fmontes@student.42.fr>            +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/05/20 13:19:04 by fmontes           #+#    #+#             */
-/*   Updated: 2024/05/23 12:22:43 by fmontes          ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "minishell.h"
 
-int	heredoc(char *cmd, t_env *env)
+int	write_in_stdin(int flag, char *joined, char **args)
 {
-	(void)env;
-	// int flag = 0;
-	 int output_fd;
-	char *joined = ft_strdup("");
-	// int output_fd;
-	char **args;
-	int i;
-	char *delimitador;
-	char *input;
-	output_fd = -1;
-	i = 0;
-	args = ft_split(cmd, ' ');
-	/*while (cmd[i])
+	if (flag)
 	{
-		if (hidenp("<<", cmd) == 1)
-	}*/
+		int fd[2];
+		__pid_t	pid;
+
+		pipe(fd);
+		pid = fork();
+		if (pid == 0)
+		{	
+			close(fd[1]);
+			dup2(fd[0], STDIN_FILENO);
+			close(fd[0]);
+
+			if (execve(ft_strjoin("/bin/", args[0]), args, NULL) == -1)
+			{
+				ft_printf("minishell: command not found: %s\n", args[0]);
+				exit(EXIT_FAILURE);
+			}
+		}
+		close(fd[0]);
+		write(fd[1], joined, ft_strlen(joined));
+		close(fd[1]);
+		waitpid(pid, NULL, 0);
+		return (1);
+	}
+	return (0);
+}
+
+int	heredoc(char **args, t_env *env)
+{
+	int		i;
+	int		input_fd;
+	int		output_fd;
+	int		flag = 0;
+	char	*joined = ft_strdup("");
+	char	*delimitador;
+	char	*input;
+
+	flag = 0;
+	joined = ft_strdup("");
+	i = 0;
 	while (args[i])
 	{
 		if (ft_strncmp(args[i], "<<", ft_strlen(args[i])) == 0)
@@ -39,56 +52,18 @@ int	heredoc(char *cmd, t_env *env)
 			while (1)
 			{
 				input = readline(">");
-				// input = ft_strtrim(join_expand(input), " 	");
 				if (ft_strncmp(input, delimitador, ft_strlen(delimitador)) == 0)
 				{
 					free(input);
-					break ;
+					break;
 				}
 				joined = ft_strjoin(joined, input);
 				joined = ft_strjoin(joined, "\n");
 				free(input);
 			}
-			// flag = 1;
-		}
-		else if (ft_strncmp(args[i], ">>", ft_strlen(args[i])) == 0)
-		{
-			args[i] = NULL;
-			output_fd = open(args[i + 1], O_WRONLY | O_CREAT | O_APPEND, 0644);
-			if (output_fd == -1)
-			{
-				perror("open");
-				exit(EXIT_FAILURE);
-			}
+			flag = 1;
 		}
 		i++;
 	}
-	if (output_fd != -1)
-	{
-		dup2(output_fd, STDOUT_FILENO);
-		close(output_fd);
-	}
-	// if (flag)
-	// {
-	// 	int fd[2];
-	// 	__pid_t pid;
-
-	// 	pipe(fd);
-	// 	pid = fork();
-	// 	if (pid == 0)
-	// 	{
-	// 		close(fd[1]);
-	// 		dup2(fd[0], STDIN_FILENO);
-	// 		close(fd[0]);
-
-	// 		exec(cmd, args, env);
-	// 	}
-	// 	close(fd[0]);
-	// 	write(fd[1], joined, ft_strlen(joined));
-	// 	close(fd[1]);
-	// 	waitpid(pid, NULL, 0);
-	// 	return (1);
-	// }
-	return (0);
+	return (write_in_stdin(flag, joined, args));
 }
-
