@@ -1,69 +1,58 @@
 #include "minishell.h"
 
-int	write_in_stdin(int flag, char *joined, char **args)
+int	heredoc_loop(char *line, t_word *data, int fd[])
 {
-	if (flag)
+	while (1)
 	{
-		int fd[2];
-		__pid_t	pid;
-
-		pipe(fd);
-		pid = fork();
-		if (pid == 0)
-		{	
-			close(fd[1]);
-			dup2(fd[0], STDIN_FILENO);
-			close(fd[0]);
-
-			if (execve(ft_strjoin("/bin/", args[0]), args, NULL) == -1)
-			{
-				ft_printf("minishell: command not found: %s\n", args[0]);
-				exit(EXIT_FAILURE);
-			}
+		line = readline(">");
+		if (!line || ft_strncmp(data->next->word, line, ft_strlen(line) + 1) == 0)
+			break;
+		else if (line)
+		{
+			write (fd[1], line, ft_strlen(line));
+			write (fd[1], "\n", 1);
+			free(line);
 		}
-		close(fd[0]);
-		write(fd[1], joined, ft_strlen(joined));
-		close(fd[1]);
-		waitpid(pid, NULL, 0);
-		return (1);
 	}
-	return (0);
+	if (line)
+		free(line);
 }
 
-int	heredoc(char **args, t_env *env)
+int	heredoc(t_word *data)
 {
-	int		i;
-	int		input_fd;
-	int		output_fd;
-	int		flag = 0;
-	char	*joined = ft_strdup("");
-	char	*delimitador;
-	char	*input;
+	int		fd[2];
+	char	*line;
 
-	flag = 0;
-	joined = ft_strdup("");
-	i = 0;
-	while (args[i])
+	if (pipe(fd) == -1)
+		return (-1);
+	line = NULL;
+	heredoc_loop(line, data, fd);
+	close (fd[1]);
+	return (fd[0]);
+}
+
+int append(t_word *data)
+{
+	t_word *current;
+	current = data;
+	int fd_out;
+	
+	while (current && current->flag != WORD)
+		current = current->next;
+	while (current && current->flag != PIPE)
 	{
-		if (ft_strncmp(args[i], "<<", ft_strlen(args[i])) == 0)
-		{
-			args[i] = NULL;
-			delimitador = args[i + 1];
-			while (1)
-			{
-				input = readline(">");
-				if (ft_strncmp(input, delimitador, ft_strlen(delimitador)) == 0)
+		if (current->flag == APPEND)
+		{		
+				fd_out = open(current->next->word, O_WRONLY | O_CREAT | O_APPEND, 0644);
+				if (fd_out == -1)
 				{
-					free(input);
-					break;
+					perror("open");
+					return (-1);
 				}
-				joined = ft_strjoin(joined, input);
-				joined = ft_strjoin(joined, "\n");
-				free(input);
-			}
-			flag = 1;
+					current->fd[1] = fd_out;
+					dup2(current->fd[1], STDIN_FILENO);
 		}
-		i++;
+		current = current->next;
 	}
-	return (write_in_stdin(flag, joined, args));
+	return (0);
 }

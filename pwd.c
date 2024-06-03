@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pwd.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fmontes <fmontes@student.42.fr>            +#+  +:+       +#+        */
+/*   By: jveras <verasjoan587@gmail.com>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/03 13:08:20 by fmontes           #+#    #+#             */
-/*   Updated: 2024/05/28 09:45:40 by fmontes          ###   ########.fr       */
+/*   Updated: 2024/05/31 11:40:28 by jveras           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,8 @@
 
 void pwd(t_word *data, t_env *env)
 {
-	char *current_directory;
-	t_word *current;
+	char	*current_directory;
+	t_word	*current;
 
 	current = data;
 	while (current)

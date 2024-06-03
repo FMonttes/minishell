@@ -1,17 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_putchar_fd.c                                    :+:      :+:    :+:   */
+/*   signals.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: felperei <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: fmontes <fmontes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/10/25 13:52:03 by felperei          #+#    #+#             */
-/*   Updated: 2023/10/25 15:54:22 by felperei         ###   ########.fr       */
+/*   Created: 2024/06/03 08:51:24 by fmontes           #+#    #+#             */
+/*   Updated: 2024/06/03 08:51:52 by fmontes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-#include "libft.h"
 
-void	ft_putchar_fd(char c, int fd)
+#include "minishell.h"
+
+void handle_sigint(int signo)
 {
-	write(fd, &c, 1);
+    if (signo == SIGINT)
+    {
+        write(1, "\n", 1);
+        rl_on_new_line();
+        rl_replace_line("", 0);
+        rl_redisplay();
+    }
 }

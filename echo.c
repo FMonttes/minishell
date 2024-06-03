@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   echo.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fmontes <fmontes@student.42.fr>            +#+  +:+       +#+        */
+/*   By: jveras <verasjoan587@gmail.com>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/02 13:40:28 by fmontes           #+#    #+#             */
-/*   Updated: 2024/05/28 08:31:44 by fmontes          ###   ########.fr       */
+/*   Updated: 2024/05/30 15:55:22 by jveras           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,20 +74,30 @@ char *remove_extra_spaces(char *str, int maintain_double_q_spaces)
 	return (str);
 }
 
-void echo_command(char *input, t_env *env)
+void echo_command(t_word *word)
 {
-	char **args;
-	args = ft_split(input, ' ');
-	int pid = fork();
-	if (pid == 0)
+	t_word	*current;
+
+	if (ft_strncmp(word->word, "echo", ft_strlen(word->word)) == 0)
 	{
-		if (!args[1] && ft_strncmp("echo", args[0], ft_strlen(args[0])) == 0)
-			ft_printf("\n");
-		else if (ft_strncmp("echo", args[0], ft_strlen(args[0])) == 0 && ft_strncmp("-n", args[1], ft_strlen(args[1])) == 0)
-			ft_printf("%s", remove_extra_spaces(input, 1) + 8);
-		else if (ft_strncmp("echo", args[0], ft_strlen(args[0])) == 0)
-			ft_printf("%s\n", remove_extra_spaces(input, 1) + 5);
-		exit(0);
+		if (!word->next)
+		{
+			printf("\n");
+			return ;
+		}
+		current = word;
+		current = current->next;
+		if (ft_strncmp(word->next->word, "-n", ft_strlen(word->next->word)) == 0)
+			current = current->next;
+		while (current)
+		{
+			printf("%s", current->word);
+			if (current->next)
+				printf(" ");
+			current = current->next;
+		}
+		if (ft_strncmp(word->next->word, "-n", ft_strlen(word->next->word)) == 0)
+			return ;
+		printf("\n");
 	}
-	wait(NULL);
 }

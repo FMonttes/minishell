@@ -6,7 +6,7 @@
 /*   By: fmontes <fmontes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/02 13:56:03 by fmontes           #+#    #+#             */
-/*   Updated: 2024/05/28 09:29:12 by fmontes          ###   ########.fr       */
+/*   Updated: 2024/06/03 08:52:38 by fmontes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,6 @@
 #include <stddef.h>
 #include <stdio.h>
 #include "libft/libft.h"
-#include "ft_printf/libftprintf.h"
 #include <stdlib.h>
 #include <readline/readline.h>
 #include <readline/history.h>
@@ -57,7 +56,7 @@ typedef struct s_word
 	struct s_word *head;
 	struct s_word *next;
 	t_tkn *token;
-	__pid_t pid;
+	int pid;
 } t_word;
 
 typedef struct l_stack
@@ -73,60 +72,60 @@ typedef struct s_env
 	struct s_env *next;
 } t_env;
 
+size_t list_size(t_env *env);
+size_t count_til_c(char *word, char c);
+size_t get_env_var_name_size(char *string);
+
 t_env *init_env(char **environ);
 
 t_word *ft_lstnew(char *input);
-t_word *creat_list(char *input);
+t_word *create_word_lst(char *input);
 
-size_t list_size(t_env *env);
-
-void executor(t_word *word, t_env *env);
+int ft_isspace(int c);
+int append(t_word *data);
+int heredoc(t_word *data);
+int do_redir(t_word *data);
+int executor(t_word *word, t_env *env);
 
 void cd(t_word *data);
-void echo(char *input);
-void init_signals(void);
 void token(t_word *data);
-void print_pwd(char *input);
-void print_echo(char *input);
-void sigint_handler(int sig);
+void wait_cmds(t_word *node);
 void print_list(t_word *head);
-void sigquit_handler(int sig);
 void print_list(t_word *head);
+void echo_command(t_word *word);
 void pwd(t_word *list, t_env *env);
 void exec(t_word *word, t_env *env);
-void unset(char *input, t_env *env);
-void pipe_exec(char *input, int fd[]);
 void print_env(char *input, t_env *env);
-void creat_env(char *input, t_env *env);
 void bash_execs(t_word *list, t_env *env);
 void env_command(char *input, t_env *env);
-void echo_command(char *input, t_env *env);
 void redirect_env(char *input, t_env *env);
 void unset_command(char *input, t_env *env);
 void append_env_var(t_env *env, char *env_s);
 void export_command(char *input, t_env *env);
+void remove_quotes_all_prompt(t_word *prompt);
+void apply_expand(t_word *prompt, t_env *env);
+void ft_lstadd_back(t_word **lst, t_word *new);
 void list_remove_if(t_env **env, char *str,
 					int (*cmp)(const char *, const char *, size_t));
+void handle_sigint(int signo);
 
 int redirect(char **av);
+int heredoc(t_word *data);
 int ft_exit(t_word *data);
 int count_quotes(char *input);
-int heredoc(char **args, t_env *env);
-int print_exit_status(char *input);
 int hidenp(char *cmd, char *input);
-int pipe_operator(int fd[], char **args);
 int check_builtin(char *input, t_env *env);
-int print_builtin(char *input, char **env);
 
-char *first_word(char *input);
-char *remove_e_spaces(char *input);
-char **env_list_to_sstrs(t_env *env);
 char *strq(char *input);
-char *join_expand(char *input, t_env *env);
-char *remove_extra_spaces(char *str, int maintain_double_q_spaces);
-
-char **get_path(void);
+char *first_word(char *input);
+char **fill_list(t_word *data);
+char *get_env_var_name(char *word);
 char **env_list_to_sstrs(t_env *env);
-char **get_params(char *input, char **params, char **words, char *command);
+char **env_list_to_sstrs(t_env *env);
+char *expand_word(char *word, t_env *env);
+char *join_expand(char *input, t_env *env);
+char *get_env_var_value(t_env *env, char *var_name);
+char *search_and_replace_customized(char *s, char old, char new);
+char *remove_extra_spaces(char *str, int maintain_double_q_spaces);
 
 #endif

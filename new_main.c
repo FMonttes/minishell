@@ -12,9 +12,24 @@ void wait_cmds(t_word *node)
 	{
 		if (node->pid != 0)
 			waitpid(node->pid, &(node->status), 0);
+		if (WIFEXITED(aux->status))
+			g_exit_status = WEXITSTATUS(aux->status);
 		node = node->next;
 	}
 	return;
+}
+
+unsigned int g_exit_status;
+
+void handle_sigint(int signo)
+{
+	if (signo == SIGINT)
+	{
+		write(1, "\n", 1);
+		rl_on_new_line();
+		rl_replace_line("", 0);
+		rl_redisplay();
+	}
 }
 
 int main(void)
@@ -33,7 +48,12 @@ int main(void)
 	{
 		dup2(old_in, 0);
 
+		printf("%d", g_exit_status);
+		signal(SIGINT, handle_sigint);
+		signal(SIGQUIT, SIG_IGN);
 		input = readline("\x1b[1;36mminishell\u2192\x1b[0m ");
+		/* if (!input || input[0] == '\0')
+			continue; */
 		char *raw_input = ft_strdup(input);
 		input = strq(input);
 		input = ft_strtrim(join_expand(input, env), " \t");

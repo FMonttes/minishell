@@ -1,43 +1,4 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   bash_execs.c                                       :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: fmontes <fmontes@student.42.fr>            +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/05/22 13:14:45 by felperei          #+#    #+#             */
-/*   Updated: 2024/05/28 09:47:47 by fmontes          ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "minishell.h"
-
-char **fill_list(t_word *data)
-{
-	int i;
-	int z;
-	char **ret;
-	t_word *current;
-
-	current = data;
-	z = 0;
-	i = 0;
-	while (current && current->flag == WORD)
-	{
-		i++;
-		current = current->next;
-	}
-	ret = malloc(sizeof(char *) * i + 1);
-	current = data;
-	while (z < i)
-	{
-		ret[z] = ft_strdup(current->word);
-		z++;
-		current = current->next;
-	}
-	ret[z] = NULL;
-	return (ret);
-}
 
 void exec(t_word *word, t_env *env)
 {
@@ -54,6 +15,7 @@ void exec(t_word *word, t_env *env)
 		dup2(word->fd[1], STDOUT_FILENO);
 	if (word->fd[0] != STDIN_FILENO)
 		dup2(word->fd[0], STDIN_FILENO);
+
 	current = word->head;
 	while (current)
 	{
@@ -81,7 +43,7 @@ void exec(t_word *word, t_env *env)
 
 	if (execve(full_path, word->cmds, env_list_to_sstrs(env)) == -1)
 	{
-		printf("minishell: command not found %s\n", full_path);
+		printf("minishell: command not found %s\n", word->word);
 		// exit_status = 127;
 		exit(127);
 	}
@@ -92,13 +54,14 @@ void exec(t_word *word, t_env *env)
 void bash_execs(t_word *data, t_env *env)
 {
 	__pid_t pid;
-	// extern unsigned int exit_status;
+	extern unsigned int g_exit_status;
 
 	pid = fork();
 	if (pid == 0)
 		exec(data, env);
-	waitpid(pid, NULL, 0);
-	// exit_status = WEXITSTATUS(status);
+	waitpid(pid, &(data->status), 0);
+	if (WIFEXITED(data->status))
+		g_exit_status = WEXITSTATUS(data->status);
 }
 
 t_word *get_next_pipe(t_word *current)
@@ -120,35 +83,36 @@ void exec_pipe(t_word *word, t_env *env)
 	exec(word, env);
 }
 
-void ft_pipe(t_word *word)
+void close_pipe(int *fd)
+{
+	close(fd[0]);
+	close(fd[1]);
+	return;
+}
+
+int ft_pipe(t_word *prompt)
 {
 	int fd[2];
 	t_word *cmd;
 
-	while (word)
+	while (prompt)
 	{
-		while (word && word->flag != PIPE && word->flag != WORD)
-			word = word->next;
-		cmd = word;
-		while (word && word->flag != PIPE)
-			word = word->next;
-		if (!word)
-			return;
+		cmd = prompt;
+		while (prompt && prompt->flag != PIPE)
+			prompt = prompt->next;
+		if (!prompt)
+			return (0);
 		if (pipe(fd) == -1)
-			return;
+			return (1);
 		cmd->fd[1] = fd[1];
-		word = word->next;
-		cmd = word;
-		while (cmd && cmd->flag != PIPE && cmd->flag != WORD)
-			cmd = cmd->next;
+		prompt = prompt->next;
+		cmd = prompt;
 		if (cmd)
-			word->fd[0] = fd[0];
+			cmd->fd[0] = fd[0];
 		else
-		{
-			close(fd[0]);
-			close(fd[1]);
-		}
+			close_pipe(fd);
 	}
+	return (0);
 }
 
 void close_sentence_fd(t_word *word)
@@ -163,7 +127,7 @@ void close_sentence_fd(t_word *word)
 	}
 }
 
-void executor(t_word *word, t_env *env)
+int executor(t_word *word, t_env *env)
 {
 	int has_pipe;
 	t_word *current;
@@ -183,17 +147,12 @@ void executor(t_word *word, t_env *env)
 	current = word;
 	while (current)
 	{
-		if (count_quotes(word->raw_cmd) % 2 == 0)
-		{
-			if (has_pipe)
-				exec_pipe(current, env);
-			else
-			{
-				printf("bash_execs()\n");
-				bash_execs(current, env);
-			}
-		}
+		if (has_pipe)
+			exec_pipe(current, env);
+		else
+			bash_execs(current, env);
 		close_sentence_fd(current);
 		current = get_next_pipe(current);
 	}
+	return (0);
 }
