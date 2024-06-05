@@ -23,6 +23,12 @@ void	cd(t_word *data)
 		chdir(getenv("HOME"));
 		return ;
 	}
+	else if (ft_strncmp("cd..", current->word, ft_strlen(current->word)) == 0
+		&& current->next == NULL)
+		{
+			printf("cd: error");
+			return ;
+		}
 	if (count_quotes(current->raw_cmd) % 2 == 0)
 	{
 		if (chdir(current->next->word) == 0)
