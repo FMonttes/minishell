@@ -9,12 +9,14 @@ BUILTINS_DIR = /builtins
 REDIRECTS_DIR = /redirects
 EXECUTOR_DIR = /executor
 INCLUDES_DIR = /includes
+UTILS_DIR = /utils
 LIBFT = libft.a
 
 SRCS = $(wildcard $(SRC_DIR)/*.c) \
        $(wildcard $(SRC_DIR)$(BUILTINS_DIR)/*.c) \
        $(wildcard $(SRC_DIR)$(REDIRECTS_DIR)/*.c) \
-       $(wildcard $(SRC_DIR)$(EXECUTOR_DIR)/*.c)
+       $(wildcard $(SRC_DIR)$(EXECUTOR_DIR)/*.c) \
+       $(wildcard $(SRC_DIR)$(UTILS_DIR)/*.c)
        $(wildcard $(SRC_DIR)$(INCLUDES_DIR)/*.h)
 
 OBJS = $(SRCS:.c=.o)
@@ -36,6 +38,7 @@ clean:
 	@$(RM) $(SRC_DIR)$(BUILTINS_DIR)/*.o
 	@$(RM) $(SRC_DIR)$(REDIRECTS_DIR)/*.o
 	@$(RM) $(SRC_DIR)$(EXECUTOR_DIR)/*.o
+	@$(RM) $(SRC_DIR)$(UTILS_DIR)/*.o
 
 fclean: clean
 	@make fclean -C libft

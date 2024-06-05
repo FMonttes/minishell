@@ -3,15 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   ft_itoa.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: felperei <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: felperei <felperei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/30 11:19:00 by felperei          #+#    #+#             */
-/*   Updated: 2023/10/30 12:01:31 by felperei         ###   ########.fr       */
+/*   Updated: 2024/06/05 10:45:08 by felperei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
 #include "libft.h"
 
-static	int	ft_count(long int n)
+static int	ft_count(long int n)
 {
 	int	count;
 
@@ -21,6 +22,8 @@ static	int	ft_count(long int n)
 		n *= -1;
 		count++;
 	}
+	if (n == 0)
+		count++;
 	while (n > 0)
 	{
 		n /= 10;
@@ -33,8 +36,8 @@ char	*ft_transform(long int nb, char *str, int i)
 {
 	while (nb > 0)
 	{
-		str[i--] = nb % 10 + '0';
-		nb = nb / 10;
+		str[i--] = (nb % 10) + '0';
+		nb /= 10;
 	}
 	return (str);
 }
@@ -45,22 +48,20 @@ char	*ft_itoa(int n)
 	int			i;
 	long int	nb;
 
+	i = ft_count(n);
 	nb = n;
-	i = ft_count(nb);
-	str = malloc(i * sizeof(char) + 1);
+	str = malloc(sizeof(char) * i + 1);
 	if (!str)
 		return (NULL);
-	str[i--] = 0;
 	if (nb == 0)
-	{
-		str = ft_calloc(2, sizeof(char));
 		str[0] = '0';
-	}
 	if (nb < 0)
 	{
+		free(str);
 		str[0] = '-';
 		nb *= -1;
 	}
+	str[i--] = '\0';
 	ft_transform(nb, str, i);
 	return (str);
 }
